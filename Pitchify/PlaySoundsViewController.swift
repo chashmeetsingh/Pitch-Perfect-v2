@@ -11,10 +11,14 @@ import AVFoundation
 
 class PlaySoundsViewController: UIViewController {
 
-    @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var pitchSelection: UISegmentedControl!
-    @IBOutlet weak var audioRate: UISlider!
+    @IBOutlet weak var chipmunkButton: UIButton!
+    @IBOutlet weak var darkvaderButton: UIButton!
+    @IBOutlet weak var parrotButton: UIButton!
+    @IBOutlet weak var rabbitButton: UIButton!
+    @IBOutlet weak var reverbButton: UIButton!
+    @IBOutlet weak var snailButton: UIButton!
+
 
     var recordedAudioURL: NSURL!
     var audioFile: AVAudioFile!
@@ -22,12 +26,11 @@ class PlaySoundsViewController: UIViewController {
     var audioPlayerNode: AVAudioPlayerNode!
     var stopTimer: NSTimer!
 
-    enum Slider: Int { case DarkVader = 0, ChipMunk }
+    enum ButtonType: Int { case Slow = 0, Fast, ChipMunk, Vader, Echo, Reverb }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        stopButton.enabled = false
         setupAudio()
     }
 
@@ -36,34 +39,30 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func playAudio(sender: AnyObject) {
-        play()
-    }
+        print("Play Audio Button pressed")
 
-    func play() {
-
-        // Get rate from slider
-        let rate = Float(audioRate.value)
-
-        // Choose from slider
-        switch (Slider(rawValue: pitchSelection.selectedSegmentIndex)!) {
-        case .DarkVader:
-            playSound(rate: -rate)
+        // Choose from diff buttons
+        switch (ButtonType(rawValue: sender.tag)!) {
+        case .Slow:
+            playSound(rate: 0.5)
+        case .Fast:
+            playSound(rate: 1.5)
         case .ChipMunk:
-            playSound(rate: rate)
+            playSound(rate: 1000)
+        case .Vader:
+            playSound(rate: -1000)
+        case .Echo:
+            playSound(echo: true)
+        case .Reverb:
+            playSound(reverb: true)
         }
 
         // Update to playing state
         configureUI(.Playing)
     }
 
-    @IBAction func stopAudio(sender: AnyObject) {
+    @IBAction func stopPlaying(sender: AnyObject) {
         stopAudio()
-    }
-
-
-    @IBAction func rateChanged(sender: AnyObject) {
-        stopAudio()
-        play()
     }
 
 }
