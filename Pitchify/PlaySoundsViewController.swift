@@ -35,6 +35,7 @@ class PlaySoundsViewController: UIViewController {
     }
 
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         configureUI(.NotPlaying)
     }
     
@@ -48,9 +49,9 @@ class PlaySoundsViewController: UIViewController {
         case .Fast:
             playSound(rate: 1.5)
         case .ChipMunk:
-            playSound(rate: 1000)
+            playSound(pitch: 1000)
         case .Vader:
-            playSound(rate: -1000)
+            playSound(pitch: -1000)
         case .Echo:
             playSound(echo: true)
         case .Reverb:

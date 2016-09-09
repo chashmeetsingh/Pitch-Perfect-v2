@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RecordAudioViewController.swift
 //  Pitchify
 //
 //  Created by Y50-70 on 07/09/16.
@@ -24,16 +24,15 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
         stopRecordingButton.enabled = false
     }
 
+    func recordingActive(state: Bool){
+        startRecordingButton.enabled = !state
+        stopRecordingButton.enabled = state
+        recordingLabel.text = state == true ? "Recording" : "Processing.."
+    }
+
     @IBAction func startRecording(sender: AnyObject) {
 
-        // Update state to in progress
-        recordingLabel.text = "Recording...."
-
-        // Enables stop recording button
-        stopRecordingButton.enabled = true
-
-        // Disables recording button
-        startRecordingButton.enabled = false
+        recordingActive(true)
 
         // Get directory
         let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask, true)[0] as String
@@ -58,14 +57,8 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
     }
 
     @IBAction func stopRecording(sender: AnyObject) {
-        // Enables stop recording button
-        startRecordingButton.enabled = true
 
-        // Disables stop recording button
-        stopRecordingButton.enabled = false
-
-        // Updates recording label
-        recordingLabel.text = "Tap to Record"
+        recordingActive(false)
 
         // Stop Recording
         audioRecorder.stop()
@@ -80,7 +73,7 @@ class RecordAudioViewController: UIViewController, AVAudioRecorderDelegate {
 
         // Perform segue
         if flag {
-            self.performSegueWithIdentifier("stopRecording", sender: audioRecorder.url)
+            performSegueWithIdentifier("stopRecording", sender: audioRecorder.url)
         } else {
             print("Saving of recording failed")
         }
